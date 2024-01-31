@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>versritmus</title>
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <style>
+
+        html { background-color: #333333; }
+
+        body {
+            height: 100vh;
+            margin: 0;
+            font-family: "Arial", sans-serif;
+        }
+
+        #inputContainer {
+            margin-top: 60px;
+            text-align: center;
+        }
+
+        #textInput {
+            outline: none;
+            border: none;
+            background: transparent;
+            font-size: 1.5em;
+            color: whitesmoke;
+            text-align: center;
+            padding: 10px;
+            caret-color: transparent;
+            width: 80%;
+            max-width: 300px;
+        }
+
+        #textInput:focus {
+            caret-color: initial;
+        }
+
+        .hidden-dots {
+            color: whitesmoke;
+            pointer-events: none;
+        }
+
+        #title {
+            color: whitesmoke;
+            text-align: center;
+            font-size: 1.5em;
+        }
+
+        #echoContainer {
+            color: whitesmoke;
+            text-align: center;
+            margin-top: 60px;
+            font-size: 1.5em;
+        }
+
+        #submitButton {
+            background-color: #dadadab2;
+            color: whitesmoke;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            margin: 0 auto;
+            /* Center the button horizontally */
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+
+        #deleteButton {
+            background-color: #dadada80;
+            color: whitesmoke;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            margin: 0 auto;
+            /* Center the button horizontally */
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="inputContainer">
+        <div id="title">írjon be egy verssort a ritmus meghatározásához:</div>
+        <input type="text" id="textInput" placeholder="..." maxlength="100vw" onkeydown="handleKeyPress(event)" />
+        <div class="hidden-dots"></div>
+        <button id="submitButton" onclick="echoText()">></button>
+        <button id="deleteButton" onclick="deleteText()"><</button>
+    </div>
+
+    <div id="echoContainer"></div>
+
+    <script>
+        function isVowel(c) {
+            return !!(
+                c === "a" ||
+                c === "e" ||
+                c === "i" ||
+                c === "o" ||
+                c === "ö" ||
+                c === "u" ||
+                c === "ü" ||
+                c === "á" ||
+                c === "é" ||
+                c === "í" ||
+                c === "ó" ||
+                c === "ő" ||
+                c === "ú" ||
+                c === "ű"
+            );
+        }
+
+        function isConsonant(c) {
+            return !isVowel(c);
+        }
+
+        function isLongVowel(c) {
+            return !!(
+                c === "á" ||
+                c === "é" ||
+                c === "í" ||
+                c === "ó" ||
+                c === "ő" ||
+                c === "ú" ||
+                c === "ű"
+            );
+        }
+
+        function isShortVowel(c) {
+            return !!(
+                c === "a" ||
+                c === "e" ||
+                c === "i" ||
+                c === "o" ||
+                c === "ö" ||
+                c === "u" ||
+                c === "ü"
+            );
+        }
+
+        function doubleConsonantsFollow(c1, c2) {
+            return !!(
+                (c1 === "c" && c2 === "s") ||
+                (c1 === "d" && c2 === "z") ||
+                (c1 === "g" && c2 === "y") ||
+                (c1 === "l" && c2 === "y") ||
+                (c1 === "n" && c2 === "y") ||
+                (c1 === "s" && c2 === "z") ||
+                (c1 === "z" && c2 === "s") ||
+                (c1 === "t" && c2 === "y")
+            );
+        }
+
+        function tripleConsonantFollows(c1, c2, c3) {
+            return !!(c1 === "d" && c2 === "z" && c3 === "s");
+        }
+
+        function convertToLowercase(inputText) {
+            return inputText.toLowerCase();
+        }
+
+        function removeSpecialCharacters(inputText) {
+            return inputText.replace(/[^a-záéíóöőúüű]/g, "");
+        }
+
+        function cleanInputText(inputText) {
+            var lowercaseText = convertToLowercase(inputText);
+            var cleanedText = removeSpecialCharacters(lowercaseText);
+            return cleanedText;
+        }
+
+        function getRhythmAfterShortVowel(cleanVerse, i) {
+            if (
+                i + 1 < cleanVerse.length &&
+                isConsonant(cleanVerse.charAt(i + 1))
+            ) {
+                if (
+                    i + 2 < cleanVerse.length &&
+                    isConsonant(cleanVerse.charAt(i + 2))
+                ) {
+                    if (
+                        (i + 3 < cleanVerse.length &&
+                            doubleConsonantsFollow(
+                                cleanVerse.charAt(i + 1),
+                                cleanVerse.charAt(i + 2)
+                            ) &&
+                            isVowel(cleanVerse.charAt(i + 3))) ||
+                        (i + 3 === cleanVerse.length &&
+                            doubleConsonantsFollow(
+                                cleanVerse.charAt(i + 1),
+                                cleanVerse.charAt(i + 2)
+                            ))
+                    ) {
+                        return "U ";
+                    } else if (
+                        (i + 4 < cleanVerse.length &&
+                            tripleConsonantFollows(
+                                cleanVerse.charAt(i + 1),
+                                cleanVerse.charAt(i + 2),
+                                cleanVerse.charAt(i + 3)
+                            ) &&
+                            isVowel(cleanVerse.charAt(i + 4))) ||
+                        (i + 4 === cleanVerse.length &&
+                            tripleConsonantFollows(
+                                cleanVerse.charAt(i + 1),
+                                cleanVerse.charAt(i + 2),
+                                cleanVerse.charAt(i + 3)
+                            ))
+                    ) {
+                        return "U ";
+                    } else {
+                        return "— ";
+                    }
+                } else {
+                    return "U ";
+                }
+            } else {
+                return "U ";
+            }
+        }
+
+        function detectRhythmPattern(inputText) {
+            var cleanVerse = cleanInputText(inputText);
+            var rhythmPattern = "";
+
+            for (var i = 0; i < cleanVerse.length; i++) {
+                var c = cleanVerse.charAt(i);
+                if (isVowel(c)) {
+                    if (isLongVowel(c)) {
+                        rhythmPattern += "— ";
+                    } else if (isShortVowel(c)) {
+                        rhythmPattern += getRhythmAfterShortVowel(cleanVerse, i);
+                    }
+                }
+            }
+
+            return rhythmPattern;
+        }
+
+        function deleteText() {
+            const echoContainer = document.getElementById("echoContainer");
+            echoContainer.innerHTML = "";
+        }
+
+        function echoText() {
+            const input = document.getElementById("textInput");
+            const echoedText = input.value;
+
+            const echoContainer = document.getElementById("echoContainer");
+            const echoedElement = document.createElement("p");
+            echoedElement.textContent = echoedText;
+            echoContainer.appendChild(echoedElement);
+
+            const rhythmPatternElement = document.createElement("p");
+            const rhythmPattern = detectRhythmPattern(echoedText);
+            rhythmPatternElement.textContent = rhythmPattern;
+            echoContainer.appendChild(rhythmPatternElement);
+
+            // Clear input
+            input.value = "";
+
+            // Show hidden dots again
+            const hiddenDots = document.querySelector(".hidden-dots");
+            hiddenDots.style.display = "block";
+        }
+
+        const textInput = document.getElementById("textInput");
+        const hiddenDots = document.querySelector(".hidden-dots");
+
+        textInput.addEventListener("focus", () => {
+            hiddenDots.style.display = "none";
+        });
+
+        textInput.addEventListener("blur", () => {
+            if (textInput.value === "") {
+                hiddenDots.style.display = "block";
+            }
+        });
+
+        function handleKeyPress(event) {
+            if (event.key === "Enter") {
+                // If Enter key is pressed, call echoText function
+                echoText();
+            } else if (event.key === "Backspace") {
+                deleteText();
+            }
+        }
+    </script>
+</body>
+
+</html>

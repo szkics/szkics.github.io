@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sticky Dot</title>
+  <style>
+    body {
+      height: 150vh; /* Add some extra height to enable scrolling */
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      position: relative;
+    }
+
+    .dot-container {
+      position: sticky;
+      top: 100px; /* Adjust this value based on when you want the dot to become sticky */
+      z-index: 1; /* Ensure it appears above other content */
+    }
+
+    .dot {
+      width: 16px;
+      height: 16px;
+      background-color: #ad8b73;
+      border-radius: 50%;
+      display: flex;
+      text-decoration: none;
+      color: #ad8b73;
+    }
+
+    .dot-container:before {
+      content: "";
+      display: block;
+      height: 100px; /* Equal to the top offset */
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Other content goes here -->
+  <div class="dot-container">
+    <div class="dot"></div>
+  </div>
+</div>
+
+</body>
+</html>

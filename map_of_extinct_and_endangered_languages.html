@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Language Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 100vh; /* Set the height to 100% of the viewport height */
+        }
+        body {
+            margin: 0; /* Remove body margin to prevent unwanted spacing */
+        }
+        .legend {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: white;
+            padding: 10px;
+            border: 1px solid #ccc;
+            z-index: 1000;
+        }
+        .legend-item {
+            margin-bottom: 5px;
+        }
+        .circle-legend {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 5px;
+/*            margin-top: 5px;*/
+            vertical-align: middle;
+        }
+        .legend-text {
+            padding: 10px;
+            color: #333;
+        }
+        /* Style anchor elements to remove decoration, underlines, and color */
+        .leaflet-container a {
+            text-decoration: none; /* Remove underlines */
+            color: #333; /* Inherit text color from parent element */
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <div class="legend">
+        <div class="legend-item">
+            <span class="legend-text">Language Endangerment Status</span>
+        </div>
+        <div class="legend-item">
+            <div class="circle-legend" style="background: #424a40;"></div>
+            <span class="legend-text">Extinct (EX)</span>
+        </div>
+        <div class="legend-item">
+            <div class="circle-legend" style="background: #cc4339;"></div>
+            <span class="legend-text">Critically Endangered (CR)</span>
+        </div>
+        <div class="legend-item">
+            <div class="circle-legend" style="background: #cc7139;"></div>
+            <span class="legend-text">Severely Endangered (SE)</span>
+        </div>
+        <div class="legend-item">
+            <div class="circle-legend" style="background: #deb23a;"></div>
+            <span class="legend-text">Definitely Endangered (DE)</span>
+        </div>
+        <div class="legend-item">
+            <div class="circle-legend" style="background: #407a3d;"></div>
+            <span class="legend-text">Vulnerable (VU)</span>
+        </div>
+    </div>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+
+        function replaceSpacesWithUnderscores(inputString) {
+            // Use the replace() method with a regular expression to replace spaces with underscores
+            return inputString.replace(/ /g, '_');
+        }
+
+        function removeTextInParentheses(inputString) {
+            // Use a regular expression to find and remove text within parentheses
+            return inputString.replace(/\([^)]*\)/g, '');
+        }
+
+        function buildWikiLink(languageName) {
+            // TODO: if it contains (), ignore the (), simply cut it.
+            return 'https://en.wikipedia.org/wiki/' + replaceSpacesWithUnderscores(removeTextInParentheses(languageName)) + '_language';
+        }
+
+        function buildLinkElement(languageName) {
+            return '<a href="' + buildWikiLink(languageName) + '" target="_blank">' + languageName + '</a>'
+        }
+
+        var map = L.map('map').setView([0, 0], 2);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+        }).addTo(map);
+
+        var colors = {
+            "Extinct": "#424a40",
+            "Critically endangered": "#cc4339",
+            "Severely endangered": "#cc7139",
+            "Definitely endangered": "#deb23a",
+            "Vulnerable": "#407a3d"
+        };
+
+        var data = [];
+
+        // Use the fetch API to get CSV data
+        fetch("data.csv")
+            .then(response => response.text())
+            .then(csvText => {
+                var lines = csvText.split('\n');
+                var headers = lines[0].split(',');
+
+                for (var i = 1; i < lines.length; i++) {
+                    var values = lines[i].split(',');
+                    if (values.length === headers.length) {
+                        var entry = {
+                            name: values[headers.indexOf('Name in English')],
+                            lat: parseFloat(values[headers.indexOf('Latitude')]),
+                            lon: parseFloat(values[headers.indexOf('Longitude')]),
+                            category: values[headers.indexOf('Degree of endangerment')],
+                            numberOfSpeakers: parseInt(values[headers.indexOf('Number of speakers')])
+                        };
+
+                        if (!isNaN(entry.lat) && !isNaN(entry.lon)) {
+                            data.push(entry);
+                        }
+                    }
+                }
+
+                data.forEach(function (entry) {
+                    var circle = L.circle([entry.lat, entry.lon], {
+                        color: colors[entry.category],
+                        fillColor: colors[entry.category],
+                        fillOpacity: 0.5,
+                        radius: 10000
+                    }).addTo(map);
+
+
+                    if (!isNaN(entry.numberOfSpeakers)) {
+                        circle.bindPopup(buildLinkElement(entry.name)+ '<br>' + 'Number of speakers: ' + entry.numberOfSpeakers);
+                    } else {
+                        circle.bindPopup(buildLinkElement(entry.name));
+                    }
+                });
+            })
+            .catch(error => console.error(error));
+    </script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+html { background-color: #333333; } 
+
+body {
+    min-height: 100vh;
+    /* margin: 0 auto; */
+    font-family: Courier, monospace;
+}
+
+h3 {
+  margin-top: 40px;
+}
+
+.subtitle {
+  color: whitesmoke;
+}
+
+p {
+ color: whitesmoke;
+}
+
+#title {
+  color: whitesmoke;
+  font-size: 80px;
+}
+
+.programmingdot {
+  width: 16px;
+  height: 16px;
+  background-color: #ceab93;
+  border-radius: 50%;
+  display: flex;
+  position: fixed;
+  top: 1%;
+  left: 52%;
+  text-decoration: none;
+  color: #ceab93;
+}
+
+.poetrydot {
+  width: 16px;
+  height: 16px;
+  background-color: #ad8b73;
+  border-radius: 50%;
+  display: flex;
+  position: fixed;
+  top: 1%;
+  left: 58%;
+  text-decoration: none;
+  color: #ad8b73;
+}
+
+#center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+a {
+  text-decoration: none;
+  color: whitesmoke;
+}
+
+#reftoprogrammingdot {
+  top: 3.8%;
+  left: 10%;
+  position: relative;
+}
+
+.homecontainer {
+  color: whitesmoke;
+  font-size: 80px;
+  position: fixed;
+  left: 50%;
+}
+
+#poprogrammingdot {
+  top: 86.8%;
+  left: 50.3%;
+}
+
+#popoetrydot {
+  top: 86.8%;
+  left: 51.3%;
+}
+
+#prprogrammingdot {
+  top: 83.8%;
+  left: 50.3%;
+}
+
+#prpoetrydot {
+  top: 83.8%;
+  left: 51.3%;
+}
+
+#progref {
+  color: #ceab93;
+}
+
+#poetref {
+  color: #ad8b73;
+}
