@@ -3,7 +3,7 @@ html { background-color: #333333; }
 body {
     min-height: 100vh;
     /* margin: 0 auto; */
-    font-family: Courier, monospace;
+    font-family: 'Courier Prime', monospace;
 }
 
 h3 {
@@ -30,7 +30,7 @@ p {
   border-radius: 50%;
   display: flex;
   position: fixed;
-  top: 1%;
+  top: 6%;
   left: 52%;
   text-decoration: none;
   color: #ceab93;
@@ -43,7 +43,7 @@ p {
   border-radius: 50%;
   display: flex;
   position: fixed;
-  top: 1%;
+  top: 6%;
   left: 58%;
   text-decoration: none;
   color: #ad8b73;
@@ -75,22 +75,22 @@ a {
 }
 
 #poprogrammingdot {
-  top: 86.8%;
+  top: 85.0%;
   left: 50.3%;
 }
 
 #popoetrydot {
-  top: 86.8%;
+  top: 85.0%;
   left: 51.3%;
 }
 
 #prprogrammingdot {
-  top: 70.8%;
+  top: 69.1%;
   left: 50.3%;
 }
 
 #prpoetrydot {
-  top: 70.8%;
+  top: 69.1%;
   left: 51.3%;
 }
 
