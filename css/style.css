@@ -70,27 +70,29 @@ a {
 .homecontainer {
   color: whitesmoke;
   font-size: 80px;
-  position: fixed;
+  position: absolute;
   left: 50%;
+  transform: translate(-50%, -50%);
+  padding-top: 100px;
 }
 
 #poprogrammingdot {
-  top: 85.0%;
-  left: 50.3%;
+  top: 56.0%;
+  left: 10%;
 }
 
 #popoetrydot {
-  top: 85.0%;
+  top: 56.0%;
   left: 51.3%;
 }
 
 #prprogrammingdot {
-  top: 69.1%;
-  left: 50.3%;
+  top: 56.0%;
+  left: 10%;
 }
 
 #prpoetrydot {
-  top: 69.1%;
+  top: 56.0%;
   left: 51.3%;
 }
 
@@ -100,4 +102,10 @@ a {
 
 #poetref {
   color: #ad8b73;
+}
+
+.bottomcontainer {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
