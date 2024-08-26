@@ -10,8 +10,8 @@ function setup() {
                   'å','Æ' , 'Ø', 'Å']
   flock = new Flock(letters);
 
-  divident = 1;
-  for (let i = 0; i < 60; i++) {
+  divident = 5;
+  for (let i = 50; i < 60; i++) {
     const random_index= Math.floor(Math.random() * letters.length);
     if (i%10 === 0) {
       ++divident;
